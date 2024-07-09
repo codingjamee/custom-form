@@ -1,20 +1,23 @@
-import { createDOM, render, createElement } from "./core/react.js";
-
 /**  @jsx createElement */
-const App = <div style={{ width: "200px", height: "200px", backgroundColor: 'white', color: 'black' }}>hello</div>;
+import App from "./App.jsx";
 
-console.log(App);
+import { render, createElement } from "./core/react.js";
+
+const Main = () => {
+  return (
+    <div
+      style={{
+        width: "600px",
+        backgroundColor: "white",
+        color: "black",
+      }}
+    >
+      <App />
+    </div>
+  );
+};
 
 const root = document.querySelector("#root");
-render(App, root);
+render(<Main />, root);
 
-/**
- * 
- * {
-    "tag": "div",
-    "props": {},
-    "children": [
-        "hello"
-    ]
-}
- */
+export default Main;

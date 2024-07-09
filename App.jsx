@@ -4,7 +4,6 @@ import CheckBoxInput from "./common/CheckBoxInput.jsx";
 import RadioInput from "./common/RadioInput.jsx";
 
 const App = () => {
-  console.log(useState);
   const [value, setValue] = useState(1);
   console.log(value);
 

@@ -1,6 +1,5 @@
 /**  @jsx createElement */
 import App from "./App.jsx";
-
 import { render, createElement } from "./core/react.js";
 
 const Main = () => {

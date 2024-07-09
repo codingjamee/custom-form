@@ -1,3 +1,7 @@
+/**  @jsx createElement */
+
+import Main from "../main";
+
 const prevVdom = { DOM: {} };
 
 export function createDOM(node) {
@@ -47,7 +51,6 @@ export function createElement(tag, props, ...children) {
 
 export function render(vdom, container) {
   container.appendChild(createDOM(vdom));
-  updateElement(container, createDOM(vdom), prevVdom.DOM);
   prevVdom.DOM = createDOM(vdom);
 }
 
@@ -64,11 +67,21 @@ export function useState(initialState) {
   };
 
   setState(state);
+  updateElement(
+    document.querySelector("#root"),
+    createElement(Main()),
+    prevVdom.DOM
+  );
   return [state, setState];
 }
 
 function updateElement(parent, newNode, oldNode) {
-  if (!newNode && oldNode) return oldNode.remove();
+  if (!newNode && oldNode) {
+    if (oldNode.parentNode) {
+      oldNode.parentNode.removeChild(oldNode);
+    }
+    return oldNode.remove();
+  }
   if (newNode && !oldNode) return parent.appendChild(newNode);
   if (newNode instanceof Text && oldNode instanceof Text) {
     if (oldNode.nodeValue === newNode.nodeValue) return;
@@ -77,7 +90,9 @@ function updateElement(parent, newNode, oldNode) {
   }
   if (newNode.nodeName !== oldNode.nodeName) {
     const index = [...parent.childNodes].indexOf(oldNode);
-    oldNode.remove();
+    if (oldNode.parentNode) {
+      oldNode.parentNode.removeChild(oldNode);
+    }
     parent.appendChild(newNode, index);
     return;
   }
@@ -92,7 +107,7 @@ function updateElement(parent, newNode, oldNode) {
 }
 
 function updateAttributes(oldNode, newNode) {
-  const oldProps = [...oldNode.attributes];
+  const oldProps = [...oldNode?.attributes];
   const newProps = [...newNode.attributes];
 
   // 달라지거나 추가된 Props를 반영

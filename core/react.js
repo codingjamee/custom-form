@@ -1,6 +1,6 @@
 /**  @jsx createElement */
 
-import Main from "../main";
+// import Main from "../main";
 
 const prevVdom = { DOM: {} };
 
@@ -64,18 +64,18 @@ export function useState(initialState) {
     } else {
       state = mutate;
     }
+    // updateElement(
+    //   document.querySelector("#root"),
+    //   createDOM(createElement(Main())),
+    //   prevVdom.DOM
+    // );
   };
 
   setState(state);
-  updateElement(
-    document.querySelector("#root"),
-    createElement(Main()),
-    prevVdom.DOM
-  );
   return [state, setState];
 }
 
-function updateElement(parent, newNode, oldNode) {
+export function updateElement(parent, newNode, oldNode) {
   if (!newNode && oldNode) {
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);
@@ -93,6 +93,7 @@ function updateElement(parent, newNode, oldNode) {
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);
     }
+    console.log(parent, newNode);
     parent.appendChild(newNode, index);
     return;
   }
@@ -107,18 +108,18 @@ function updateElement(parent, newNode, oldNode) {
 }
 
 function updateAttributes(oldNode, newNode) {
-  const oldProps = [...oldNode?.attributes];
-  const newProps = [...newNode.attributes];
+  const oldProps = newNode.props || {};
+  const newProps = oldNode.props || {};
 
   // 달라지거나 추가된 Props를 반영
-  for (const { name, value } of newProps) {
-    if (value === oldNode.getAttribute(name)) continue;
-    oldNode.setAttribute(name, value);
+  for (const [name, value] of Object.entries(newProps)) {
+    if (value !== oldProps[name]) {
+      oldNode.setAttribute(name, value);
+    }
   }
-
-  // 없어진 props를 attribute에서 제거
-  for (const { name } of oldProps) {
-    if (newNode.getAttribute(name) !== undefined) continue;
-    oldNode.removeAttribute(name);
+  for (const name in oldProps) {
+    if (!(name in newProps)) {
+      oldNode.removeAttribute(name);
+    }
   }
 }

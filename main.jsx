@@ -1,6 +1,11 @@
 /**  @jsx createElement */
 import App from "./App.jsx";
-import { render, createElement } from "./core/react.js";
+import {
+  render,
+  createElement,
+  updateElement,
+  createDOM,
+} from "./core/react.js";
 
 const Main = () => {
   return (
@@ -17,6 +22,9 @@ const Main = () => {
 };
 
 const root = document.querySelector("#root");
-render(<Main />, root);
+render(<Main />, root)
+// updateElement(root, createDOM(<Main />), createDOM(<Main />));
 
 export default Main;
+
+//왜 setState에서는 안되고, main.jsx에서는 될까? 

@@ -1,6 +1,6 @@
 /**  @jsx createElement */
 
-// import Main from "../main";
+import Main from "../main";
 
 const prevVdom = { DOM: {} };
 
@@ -49,10 +49,24 @@ export function createElement(tag, props, ...children) {
   return { tag, props, children };
 }
 
-export function render(vdom, container) {
-  container.appendChild(createDOM(vdom));
-  prevVdom.DOM = createDOM(vdom);
-}
+export const React = () => {
+  let dom = null;
+  let target = null;
+
+  function render(vdom, container) {
+    dom = vdom;
+    target = container;
+
+    _render(vdom, container);
+  }
+
+  function _render(vdom, container) {
+    container.appendChild(createDOM(vdom));
+    prevVdom.DOM = createDOM(vdom);
+  }
+
+  return { render, target };
+};
 
 export function useState(initialState) {
   let state;
@@ -64,14 +78,8 @@ export function useState(initialState) {
     } else {
       state = mutate;
     }
-    // updateElement(
-    //   document.querySelector("#root"),
-    //   createDOM(createElement(Main())),
-    //   prevVdom.DOM
-    // );
+    updateElement(React().target, React().render, prevVdom.DOM);
   };
-
-  setState(state);
   return [state, setState];
 }
 

@@ -1,0 +1,107 @@
+.main {
+  width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: black;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  width: 640px;
+  border: 1px solid rgb(218, 220, 224);
+  border-radius: 8px;
+  font-size: 24pt;
+  font-family: "docs-Roboto", Helvetica, Arial, sans-serif;
+  letter-spacing: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  justify-content: space-evenly;
+}
+
+.app .title .edge {
+  background-color: rgb(103, 58, 183);
+  height: 10px;
+  padding: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.title > div {
+  border-bottom: 1px solid rgb(95, 99, 104);
+  padding: 22px 24px 16px 24px;
+}
+.title > div:nth-of-type(2) {
+  padding-top: 10px;
+}
+
+.title > div:last-of-type {
+  border-bottom: none;
+}
+
+.title .email {
+  color: rgb(95, 99, 104);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  gap: 2px;
+}
+
+.title .email .blue {
+  color: rgb(26, 115, 232);
+}
+
+.title .required {
+  color: rgb(217, 48, 37);
+  font-size: 14px;
+}
+
+.app .form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app .form > .input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-input {
+  width: 640px;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid rgb(218, 220, 224);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.check-input {
+  width: 640px;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid rgb(218, 220, 224);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.check-input .zone,
+.radio-input .zone {
+  display: flex;
+  flex-direction: column;
+  margin: 16px;
+  margin-left: 0;
+  gap: 12px;
+}
+
+.check-input .zone > div > label,
+.radio-input .zone > div > label {
+  margin-left: 12px;
+}

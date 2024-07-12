@@ -1,7 +1,5 @@
 /**  @jsx createElement */
 
-import Main from "../main";
-
 const prevVdom = { DOM: {} };
 
 export function createDOM(node) {
@@ -64,7 +62,7 @@ export const React = () => {
 
   function _render(vdom, container) {
     console.log({ vdom, container });
-    if (container) container.appendChild(createDOM(createElement(vdom)));
+    if (container) container.appendChild(createDOM(vdom));
     prevVdom.DOM = vdom;
   }
 
@@ -81,7 +79,7 @@ export function useState(initialState) {
     } else {
       state = mutate;
     }
-    updateElement(React().target, React().render, createDOM(prevVdom.DOM));
+    updateElement(React().target, React().render, prevVdom.DOM);
   };
   return [state, setState];
 }

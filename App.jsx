@@ -1,7 +1,5 @@
 /**  @jsx createElement */
 import { createDOM, createElement, useState } from "./core/react.js";
-import CheckBoxInput from "./common/CheckBoxInput.jsx";
-import RadioInput from "./common/RadioInput.jsx";
 import Input from "./Input.jsx";
 
 const App = () => {

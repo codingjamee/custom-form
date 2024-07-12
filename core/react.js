@@ -5,7 +5,6 @@ import Main from "../main";
 const prevVdom = { DOM: {} };
 
 export function createDOM(node) {
-  console.log({ node, tag: node.tag, type: typeof node });
   if (typeof node === "string") {
     return document.createTextNode(node);
   }
@@ -15,7 +14,6 @@ export function createDOM(node) {
   }
 
   if (typeof node.tag === "function") {
-    console.log(node.tag);
     const componentVNode = node.tag(node.props);
     return createDOM(componentVNode);
   }
@@ -25,7 +23,6 @@ export function createDOM(node) {
   if (node.props)
     Object.entries(node.props).forEach(([name, value]) => {
       if (typeof value === "function") {
-        console.log(value);
         const type = name.split("on")[1].toLowerCase();
         element.addEventListener(type, value);
       }
@@ -54,15 +51,21 @@ export const React = () => {
   let target = null;
 
   function render(vdom, container) {
-    dom = vdom;
-    target = container;
+    if (vdom) {
+      dom = vdom;
+    }
+    if (container) {
+      target = container;
+    }
 
-    _render(vdom, container);
+    console.log("_render호출", dom, target);
+    _render(dom, target);
   }
 
   function _render(vdom, container) {
-    container.appendChild(createDOM(vdom));
-    prevVdom.DOM = createDOM(vdom);
+    console.log({ vdom, container });
+    if (container) container.appendChild(createDOM(createElement(vdom)));
+    prevVdom.DOM = vdom;
   }
 
   return { render, target };
@@ -78,12 +81,13 @@ export function useState(initialState) {
     } else {
       state = mutate;
     }
-    updateElement(React().target, React().render, prevVdom.DOM);
+    updateElement(React().target, React().render, createDOM(prevVdom.DOM));
   };
   return [state, setState];
 }
 
 export function updateElement(parent, newNode, oldNode) {
+  console.log(parent);
   if (!newNode && oldNode) {
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);
@@ -97,7 +101,9 @@ export function updateElement(parent, newNode, oldNode) {
     return;
   }
   if (newNode.nodeName !== oldNode.nodeName) {
-    const index = [...parent.childNodes].indexOf(oldNode);
+    const parentNodes = [...parent.childNodes];
+    console.log(parentNodes);
+    const index = parentNodes.indexOf(oldNode);
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);
     }

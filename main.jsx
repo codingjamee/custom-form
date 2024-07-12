@@ -12,6 +12,6 @@ const Main = () => {
 };
 
 const root = document.querySelector("#root");
-React().render(Main(), root);
+React().render(Main, root);
 
 export default Main;

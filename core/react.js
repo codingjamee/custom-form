@@ -62,11 +62,12 @@ export const React = () => {
 
   function _render(vdom, container) {
     console.log({ vdom, container });
-    if (container) container.appendChild(createDOM(vdom));
+    const virtualDom = createElement(vdom);
+    if (container) container.appendChild(createDOM(virtualDom));
     prevVdom.DOM = vdom;
   }
 
-  return { render, target };
+  return { render, target, vdom: dom };
 };
 
 export function useState(initialState) {
@@ -79,7 +80,7 @@ export function useState(initialState) {
     } else {
       state = mutate;
     }
-    updateElement(React().target, React().render, prevVdom.DOM);
+    updateElement(React().target, React().vdom, prevVdom.DOM);
   };
   return [state, setState];
 }

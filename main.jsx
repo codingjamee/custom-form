@@ -1,6 +1,6 @@
 /**  @jsx createElement */
 import App from "./App.jsx";
-import { React, createElement } from "./core/react.js";
+import { react, createElement } from "./core/react.js";
 import "./main.css";
 
 const Main = () => {
@@ -12,6 +12,6 @@ const Main = () => {
 };
 
 const root = document.querySelector("#root");
-React().render(Main, root);
+react.render(Main, root);
 
 export default Main;

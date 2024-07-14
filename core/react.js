@@ -44,21 +44,10 @@ export function createElement(tag, props, ...children) {
   return { tag, props, children };
 }
 
-export const React = () => {
+function React() {
   let dom = null;
   let target = null;
-
-  function render(vdom, container) {
-    if (vdom) {
-      dom = vdom;
-    }
-    if (container) {
-      target = container;
-    }
-
-    console.log("_render호출", dom, target);
-    _render(dom, target);
-  }
+  let state;
 
   function _render(vdom, container) {
     console.log({ vdom, container });
@@ -67,26 +56,38 @@ export const React = () => {
     prevVdom.DOM = vdom;
   }
 
-  return { render, target, vdom: dom };
-};
-
-export function useState(initialState) {
-  let state;
-  if (!state) state = initialState;
-
-  const setState = (mutate) => {
-    if (typeof mutate === "function") {
-      state = mutate(state);
-    } else {
-      state = mutate;
+  this.render = function (vdom, container) {
+    if (vdom) {
+      dom = vdom;
     }
-    updateElement(React().target, React().vdom, prevVdom.DOM);
+    if (container) {
+      target = container;
+    }
+
+    _render(dom, target);
   };
-  return [state, setState];
+
+  this.useState = function (initialState) {
+    if (!state) state = initialState;
+
+    const setState = (mutate) => {
+      if (typeof mutate === "function") {
+        state = mutate(state);
+      } else {
+        state = mutate;
+      }
+      updateElement(target, dom, prevVdom.DOM);
+    };
+    return [state, setState];
+  };
 }
+
+export const react = new React();
 
 export function updateElement(parent, newNode, oldNode) {
   console.log(parent);
+  console.log(newNode);
+  console.log(oldNode);
   if (!newNode && oldNode) {
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);

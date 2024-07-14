@@ -1,9 +1,9 @@
 /**  @jsx createElement */
-import { createDOM, createElement, useState } from "./core/react.js";
+import { createDOM, createElement, react } from "./core/react.js";
 import Input from "./Input.jsx";
 
 const App = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = react.useState(1);
   console.log(value);
 
   const onClickNext = (e) => {

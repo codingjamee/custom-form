@@ -6,6 +6,7 @@ import "./main.css";
 const Main = () => {
   return (
     <div class="main">
+      text 
       <App />
     </div>
   );

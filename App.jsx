@@ -29,7 +29,7 @@ const App = () => {
       </div>
       <form class="form" onSubmit={onClickNext}>
         <Input />
-        <div>{value}</div>
+        <div>변경된 값!!!! :{value}</div>
         <button type="submit">제출</button>
       </form>
     </div>

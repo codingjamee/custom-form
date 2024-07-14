@@ -46,14 +46,21 @@ export function createElement(tag, props, ...children) {
 
 function React() {
   let dom = null;
+  let prevDom = null;
   let target = null;
   let state;
 
   function _render(vdom, container) {
     console.log({ vdom, container });
     const virtualDom = createElement(vdom);
-    if (container) container.appendChild(createDOM(virtualDom));
-    prevVdom.DOM = vdom;
+    if (container) {
+      if (container.childNodes.length > 0) {
+        container.childNodes.forEach((node) => node.remove());
+      }
+      container.appendChild(createDOM(virtualDom));
+    }
+    console.log("prevVdom에 vdom을 할당", vdom);
+    prevDom = createDOM(createElement(vdom));
   }
 
   this.render = function (vdom, container) {
@@ -76,7 +83,7 @@ function React() {
       } else {
         state = mutate;
       }
-      updateElement(target, dom, prevVdom.DOM);
+      updateElement(target, createDOM(createElement(dom)), prevDom);
     };
     return [state, setState];
   };
@@ -85,30 +92,36 @@ function React() {
 export const react = new React();
 
 export function updateElement(parent, newNode, oldNode) {
-  console.log(parent);
-  console.log(newNode);
-  console.log(oldNode);
   if (!newNode && oldNode) {
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);
     }
     return oldNode.remove();
   }
-  if (newNode && !oldNode) return parent.appendChild(newNode);
+  if (newNode && !oldNode) {
+    return parent.appendChild(newNode);
+  }
   if (newNode instanceof Text && oldNode instanceof Text) {
+    console.log("newNode instanceof Text && oldNode instanceof Text");
+    console.log(oldNode.nodeValue, newNode.nodeValue);
     if (oldNode.nodeValue === newNode.nodeValue) return;
     oldNode.nodeValue = newNode.nodeValue;
+    console.log(oldNode.nodeValue, newNode.nodeValue);
+    react.render();
     return;
   }
   if (newNode.nodeName !== oldNode.nodeName) {
+    console.log(newNode, oldNode);
     const parentNodes = [...parent.childNodes];
     console.log(parentNodes);
     const index = parentNodes.indexOf(oldNode);
+    console.log(index);
     if (oldNode.parentNode) {
-      oldNode.parentNode.removeChild(oldNode);
+      parentNodes.removeChild(oldNode);
     }
     console.log(parent, newNode);
-    parent.appendChild(newNode, index);
+    parent.appendChild(newNode);
+    console.log("parent.appendChild");
     return;
   }
   updateAttributes(oldNode, newNode);

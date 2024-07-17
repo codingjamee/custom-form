@@ -2,7 +2,7 @@
 
 const prevVdom = { DOM: {} };
 
-export function createDOM(node) {
+function createDOM(node) {
   if (typeof node === "string") {
     return document.createTextNode(node);
   }
@@ -38,7 +38,7 @@ export function createDOM(node) {
   return element;
 }
 
-export function createElement(tag, props, ...children) {
+function createElement(tag, props, ...children) {
   props = props || {};
 
   return { tag, props, children };
@@ -51,15 +51,14 @@ function React() {
   let state;
 
   function _render(vdom, container) {
-    console.log({ vdom, container });
     const virtualDom = createElement(vdom);
+    console.log(virtualDom)
     if (container) {
       if (container.childNodes.length > 0) {
         container.childNodes.forEach((node) => node.remove());
       }
       container.appendChild(createDOM(virtualDom));
     }
-    console.log("prevVdom에 vdom을 할당", vdom);
     prevDom = createDOM(createElement(vdom));
   }
 
@@ -83,15 +82,15 @@ function React() {
       } else {
         state = mutate;
       }
-      updateElement(target, createDOM(createElement(dom)), prevDom);
+      updateElement(target, createDOM(createElement(dom)), target.firstChild);
     };
     return [state, setState];
   };
 }
 
-export const react = new React();
+const react = new React();
 
-export function updateElement(parent, newNode, oldNode) {
+function updateElement(parent, newNode, oldNode) {
   if (!newNode && oldNode) {
     if (oldNode.parentNode) {
       oldNode.parentNode.removeChild(oldNode);
@@ -101,27 +100,21 @@ export function updateElement(parent, newNode, oldNode) {
   if (newNode && !oldNode) {
     return parent.appendChild(newNode);
   }
+
   if (newNode instanceof Text && oldNode instanceof Text) {
-    console.log("newNode instanceof Text && oldNode instanceof Text");
     console.log(oldNode.nodeValue, newNode.nodeValue);
     if (oldNode.nodeValue === newNode.nodeValue) return;
     oldNode.nodeValue = newNode.nodeValue;
-    console.log(oldNode.nodeValue, newNode.nodeValue);
-    react.render();
+    // react.render();
     return;
   }
   if (newNode.nodeName !== oldNode.nodeName) {
-    console.log(newNode, oldNode);
     const parentNodes = [...parent.childNodes];
-    console.log(parentNodes);
     const index = parentNodes.indexOf(oldNode);
-    console.log(index);
     if (oldNode.parentNode) {
       parentNodes.removeChild(oldNode);
     }
-    console.log(parent, newNode);
     parent.appendChild(newNode);
-    console.log("parent.appendChild");
     return;
   }
   updateAttributes(oldNode, newNode);
@@ -135,8 +128,8 @@ export function updateElement(parent, newNode, oldNode) {
 }
 
 function updateAttributes(oldNode, newNode) {
-  const oldProps = newNode.props || {};
-  const newProps = oldNode.props || {};
+  const oldProps = oldNode.props || {};
+  const newProps = newNode.props || {};
 
   // 달라지거나 추가된 Props를 반영
   for (const [name, value] of Object.entries(newProps)) {
@@ -150,3 +143,5 @@ function updateAttributes(oldNode, newNode) {
     }
   }
 }
+
+export { createDOM, createElement, react };
